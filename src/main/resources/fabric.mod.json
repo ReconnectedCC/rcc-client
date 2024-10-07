@@ -1,0 +1,41 @@
+{
+	"schemaVersion": 1,
+	"id": "rcc-client",
+	"version": "${version}",
+	"name": "rcc-client",
+	"description": "Client mod for ReconnectedCC",
+	"authors": [
+		"Me!"
+	],
+	"contact": {
+		"homepage": "https://reconnected.cc",
+		"sources": "https://github.com/reconnectedcc/rcc-client"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/rcc-client/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"cc.reconnected.rccclient.Rccclient"
+		],
+		"client": [
+			"cc.reconnected.rccclient.RccclientClient"
+		]
+	},
+	"mixins": [
+		"rcc-client.mixins.json",
+		{
+			"config": "rcc-client.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.16.0",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
