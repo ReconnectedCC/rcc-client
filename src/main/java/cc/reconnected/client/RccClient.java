@@ -1,11 +1,11 @@
-package cc.reconnected.rccclient;
+package cc.reconnected.client;
 
 import net.fabricmc.api.ModInitializer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Rccclient implements ModInitializer {
+public class RccClient implements ModInitializer {
 	public static final String MOD_ID = "rcc-client";
 
 	// This logger is used to write text to the console and the log file.
