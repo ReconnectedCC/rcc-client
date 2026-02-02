@@ -5,6 +5,9 @@
   "compatibilityLevel": "JAVA_17",
   "client": [
     "ChatHudMixin",
+    "ChatListenerMixin",
+    "OptionsMixin",
+    "ToastComponentMixin",
     "YggdrasilUserApiServiceMixin"
   ],
   "server": [],

@@ -15,7 +15,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.*;
@@ -59,13 +58,13 @@ public abstract class ChatHudMixin {
 
     @WrapOperation(
             method = "render",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;fill(IIIII)V"),
-            slice = @Slice(
-                    from = @At(value = "INVOKE", target = "Ljava/util/List;get(I)Ljava/lang/Object;"),
-                    to = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/OrderedText;III)I")
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/DrawContext;fill(IIIII)V",
+                    ordinal = 0
             )
     )
-    public void rcc$colorMessage(DrawContext context, int x1, int y1, int x2, int y2, int color, Operation<Void> original, @Local(name = "visible") ChatHudLine.Visible visible) {
+    public void rcc$colorMessage(DrawContext context, int x1, int y1, int x2, int y2, int color, Operation<Void> original, @Local ChatHudLine.Visible visible) {
         int finalColor = color;
         if (visible != null && rcc$mentioningMessages.contains(visible.addedTime())) {
             finalColor = 0xAE7322 | color;
@@ -77,12 +76,23 @@ public abstract class ChatHudMixin {
             method = {"logChatMessage"},
             at = @At(
                     value = "INVOKE",
-                    target = "Lorg/slf4j/Logger;info(Ljava/lang/String;Ljava/lang/Object;)V"
+                    target = "Lorg/slf4j/Logger;info(Ljava/lang/String;Ljava/lang/Object;)V",
+                    remap = false
             )
     )
     public void cleanLogLines(Logger logger, String format, Object arg) {
         logger.info(format, arg.toString().replaceAll("[\ue002-\ue009]",""));
     }
 
-
+    @Redirect(
+            method = {"logChatMessage"},
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lorg/slf4j/Logger;info(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V",
+                    remap = false
+            )
+    )
+    public void cleanLogLines(Logger logger, String format, Object arg, Object arg2) {
+        logger.info(format, arg.toString().replaceAll("[\ue002-\ue009]",""), arg2.toString().replaceAll("[\ue002-\ue009]",""));
+    }
 }
