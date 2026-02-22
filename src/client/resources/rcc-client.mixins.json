@@ -13,5 +13,8 @@
   "server": [],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "mixins": [
+    "CustomNameplateMixin"
+  ]
 }
