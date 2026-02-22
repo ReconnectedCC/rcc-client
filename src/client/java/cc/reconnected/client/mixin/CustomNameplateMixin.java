@@ -20,6 +20,7 @@ public abstract class CustomNameplateMixin {
     private void replaceNameplateName(CallbackInfoReturnable<Text> cir) {
         PlayerEntity self = (PlayerEntity) (Object) this;
         Team team = (Team) self.getScoreboardTeam();
+        if (team == null) return;
         if (!team.getName().startsWith("sol_")) {
             return;
         }
