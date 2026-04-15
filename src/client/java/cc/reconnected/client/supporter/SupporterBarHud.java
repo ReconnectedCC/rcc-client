@@ -47,10 +47,10 @@ public class SupporterBarHud {
 
                 .append(
                         Text.empty()
-                                .append(Text.literal("€ "))
                                 .append(getFormattedValue(SUPPORTER_GOAL.amount))
                                 .append("/")
                                 .append(getFormattedValue(SUPPORTER_GOAL.goal))
+                                .append(Text.literal("€"))
                                 .setStyle(Style.EMPTY.withColor(getTextColor(SUPPORTER_GOAL)))
                 );
     }
@@ -69,17 +69,19 @@ public class SupporterBarHud {
     }
 
     public void render(DrawContext context) {
-        int windowWidth = context.getScaledWindowWidth();
-        int barY = 12;
-        int center = windowWidth / 2 - (WIDTH / 2);
-        this.renderBossBar(context, center, barY);
+        if (SUPPORTER_GOAL != null) {
+            int windowWidth = context.getScaledWindowWidth();
+            int barY = 12;
+            int center = windowWidth / 2 - (WIDTH / 2);
+            this.renderBossBar(context, center, barY);
 
-        Text text = getTitle();
-        int textWidth = this.client.textRenderer.getWidth(text);
-        int textCenter = windowWidth / 2 - textWidth / 2;
-        int textY = barY - 9;
-        Objects.requireNonNull(this.client.textRenderer);
-        context.drawTextWithShadow(this.client.textRenderer, text, textCenter, textY, 16777215);
+            Text text = getTitle();
+            int textWidth = this.client.textRenderer.getWidth(text);
+            int textCenter = windowWidth / 2 - textWidth / 2;
+            int textY = barY - 9;
+            Objects.requireNonNull(this.client.textRenderer);
+            context.drawTextWithShadow(this.client.textRenderer, text, textCenter, textY, 16777215);
+        }
     }
 
     private void renderBossBar(DrawContext context, int x, int y) {
