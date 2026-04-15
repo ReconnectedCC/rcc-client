@@ -18,5 +18,5 @@ public class RccClientConfig {
             )
             .build();
     @SerialEntry(comment = "This controls the URL that RCC-Client pulls supporter bar data from, This is provided for development purposes.")
-    public String backendURL = "http://localhost:8080"; // change this default to the rcc api
+    public String backendURL = "https://api.reconnected.cc/stripe/data/thismonth"; // change this default to the rcc api
 }
