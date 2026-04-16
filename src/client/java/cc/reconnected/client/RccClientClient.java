@@ -23,17 +23,19 @@ public class RccClientClient implements ClientModInitializer {
     private static final HttpClient http = HttpClient.newHttpClient();
     public static Logger LOGGER = LoggerFactory.getLogger("rcc-client");
 
+    public static final String backendURL = "https://api.reconnected.cc/stripe/data/thismonth";
 
     @Override
     public void onInitializeClient() {
         // This entrypoint is suitable for setting up client-specific logic, such as rendering.
-        RccClientConfig.HANDLER.load();
+        // Config will be used later
+        //RccClientConfig.HANDLER.load();
         ScheduledExecutorService timer = Executors.newSingleThreadScheduledExecutor();
         timer.scheduleAtFixedRate(
             () -> {
             // Update SUPPORTER_GOAL with new data
                 HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(RccClientConfig.HANDLER.instance().backendURL))
+                    .uri(URI.create(backendURL))
                     .header("Accept","application/json")
                     .GET().build();
                 try {

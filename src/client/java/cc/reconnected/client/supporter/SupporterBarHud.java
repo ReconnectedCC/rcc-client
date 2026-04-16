@@ -42,7 +42,7 @@ public class SupporterBarHud {
         return Text.empty()
                 .append(Text.literal("Monthly "))
                 .append(Text.literal("Supporter")
-                        .setStyle(Style.EMPTY.withColor(Formatting.AQUA)))
+                        .setStyle(Style.EMPTY.withColor(0x1abc9c))) // Supporter color on discord
                 .append(Text.literal(" goal: "))
 
                 .append(
