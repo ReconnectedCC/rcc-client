@@ -1,6 +1,7 @@
 package cc.reconnected.client;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.Text;
 
 import java.util.regex.Pattern;
 
@@ -50,5 +51,16 @@ public class Utils {
     }
 
     public record ChatMessage(String user, String message, boolean chat) {
+    }
+
+    public static Text renderCurrency(long cents){
+        String centsStr = String.valueOf(cents);
+        centsStr = String.format("%1$3s",centsStr).replace(" ","0");//Pad zeroes left if necessary
+        centsStr = new StringBuilder(centsStr).insert(centsStr.length()-2, ".").toString();
+        if (centsStr.endsWith("00")) {
+            centsStr = centsStr.substring(0,centsStr.length()-3);
+        }
+
+        return Text.literal(centsStr);
     }
 }
