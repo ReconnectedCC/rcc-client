@@ -1,10 +1,15 @@
 package cc.reconnected.client;
 
 import cc.reconnected.client.supporter.SupporterBarHud;
+import cc.reconnected.client.updateForcer.UpdateForcerPacket;
+import cc.reconnected.client.updateForcer.UpdateForcerScreen;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.minecraft.client.gui.screen.GameMenuScreen;
+import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,6 +27,8 @@ public class RccClientClient implements ClientModInitializer {
     private SupporterBarHud supporterBarHud;
     private static final HttpClient http = HttpClient.newHttpClient();
     public static Logger LOGGER = LoggerFactory.getLogger("rcc-client");
+    private static Text updateForcerMessage = null;
+
 
     public static final String backendURL = "https://api.reconnected.cc/stripe/data/thismonth";
 
@@ -73,6 +80,20 @@ public class RccClientClient implements ClientModInitializer {
                         });
             }
 
+        });
+        ClientPlayNetworking.registerGlobalReceiver(UpdateForcerPacket.ID, ((client, handler, buf, responseSender) -> {
+            Text message = UpdateForcerPacket.readForceUpdateMessage(buf);
+            client.execute(() -> {
+                client.getNetworkHandler().getConnection().disconnect(message);
+                updateForcerMessage = message;
+
+            });
+        }));
+        ClientTickEvents.END_CLIENT_TICK.register( client -> {
+            if (updateForcerMessage != null && client.world == null) {
+                client.setScreen(new UpdateForcerScreen(updateForcerMessage));
+                updateForcerMessage = null;
+            }
         });
     }
 }
