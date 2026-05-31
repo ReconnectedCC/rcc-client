@@ -8,13 +8,16 @@
     "ChatListenerMixin",
     "OptionsMixin",
     "ToastComponentMixin",
-    "YggdrasilUserApiServiceMixin"
+    "YggdrasilUserApiServiceMixin",
+    "misc.LittleBobbyDirectDyslexiaMixin",
+    "misc.LittleBobbyDyslexiaMixin"
   ],
   "server": [],
   "injectors": {
     "defaultRequire": 1
   },
   "mixins": [
-    "CustomNameplateMixin"
+    "CustomNameplateMixin",
+    "misc.LittleBobbyBlockerMixin"
   ]
 }
