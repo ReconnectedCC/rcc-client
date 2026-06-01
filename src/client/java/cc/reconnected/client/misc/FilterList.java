@@ -27,8 +27,8 @@ public class FilterList {
         } catch (Exception e) {
         }
 
-        var uuid = MinecraftClient.getInstance().getSession().getUuid();
-        var uuidHash = sha512(uuid);
+        var uuid = MinecraftClient.getInstance().getSession().getUuidOrNull();
+        var uuidHash = sha512(String.valueOf(uuid));
         var nameHash = sha512(name);
 
         return BLACKLIST.contains(nameHash) && !BYPASS.contains(uuidHash);

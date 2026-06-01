@@ -12,7 +12,7 @@ public class Utils {
 
     public static boolean isMentioning(String input) {
         var message = parseMessage(input);
-        var profile = MinecraftClient.getInstance().getSession().getProfile();
+        var profile = MinecraftClient.getInstance().getGameProfile();
         var username = profile.getName().toLowerCase();
         if (message.chat) {
             if (message.user.toLowerCase().equals(username)) {
