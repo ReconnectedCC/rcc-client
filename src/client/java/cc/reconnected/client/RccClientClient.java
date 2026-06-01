@@ -8,6 +8,8 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.minecraft.client.gui.hud.BossBarHud;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;
@@ -37,6 +39,7 @@ public class RccClientClient implements ClientModInitializer {
         // This entrypoint is suitable for setting up client-specific logic, such as rendering.
         // Config will be used later
         //RccClientConfig.HANDLER.load();
+        PayloadTypeRegistry.playS2C().register(UpdateForcerPacket.TYPE,UpdateForcerPacket.CODEC);
         ScheduledExecutorService timer = Executors.newSingleThreadScheduledExecutor();
         timer.scheduleAtFixedRate(
             () -> {
@@ -81,8 +84,9 @@ public class RccClientClient implements ClientModInitializer {
             }
 
         });
-        ClientPlayNetworking.registerGlobalReceiver(UpdateForcerPacket.ID, ((client, handler, buf, responseSender) -> {
-            Text message = UpdateForcerPacket.readForceUpdateMessage(buf);
+        ClientPlayNetworking.registerGlobalReceiver(UpdateForcerPacket.TYPE, ((payload, context) -> {
+            var client = context.client();
+            Text message = UpdateForcerPacket.readForceUpdateMessage(payload,client.world.getRegistryManager());
             client.execute(() -> {
                 client.getNetworkHandler().getConnection().disconnect(message);
                 updateForcerMessage = message;
