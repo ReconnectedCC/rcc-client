@@ -42,7 +42,7 @@ public class UpdateForcerScreen extends Screen {
     public boolean shouldCloseOnEsc() {return false;} // You must restart to update
 
     public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {
-        this.renderBackground(ctx);
+        this.renderBackground(ctx,mouseX,mouseY,delta);
         super.render(ctx, mouseX, mouseY, delta);
     }
 }
