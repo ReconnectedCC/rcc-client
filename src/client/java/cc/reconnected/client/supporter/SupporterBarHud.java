@@ -17,7 +17,7 @@ import java.util.Objects;
 import static cc.reconnected.client.RccClientClient.SUPPORTER_GOAL;
 
 public class SupporterBarHud {
-    private static final Identifier BARS_TEXTURE = new Identifier("textures/gui/bars.png");
+    private static final Identifier BARS_TEXTURE = Identifier.ofVanilla("textures/gui/bars.png");
     private static final int WIDTH = 182;
     private static final int HEIGHT = 5;
     private static final int NOTCHED_BAR_OVERLAY_V = 80;
