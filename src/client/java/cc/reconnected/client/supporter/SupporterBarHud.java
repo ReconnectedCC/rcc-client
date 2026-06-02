@@ -17,7 +17,11 @@ import java.util.Objects;
 import static cc.reconnected.client.RccClientClient.SUPPORTER_GOAL;
 
 public class SupporterBarHud {
-    private static final Identifier BARS_TEXTURE = new Identifier("textures/gui/bars.png");
+    private static final Identifier GREEN_BACKGROUND_TEXTURE = Identifier.ofVanilla("boss_bar/green_background");
+    private static final Identifier NOTCHED_BACKGROUND_TEXTURE = Identifier.ofVanilla("boss_bar/notched_6_background");
+    private static final Identifier GREEN_TEXTURE = Identifier.ofVanilla("boss_bar/green_progress");
+    private static final Identifier NOTCHED_PROGRESS_TEXTURE = Identifier.ofVanilla("boss_bar/notched_6_progress");
+
     private static final int WIDTH = 182;
     private static final int HEIGHT = 5;
     private static final int NOTCHED_BAR_OVERLAY_V = 80;
@@ -94,9 +98,11 @@ public class SupporterBarHud {
     }
 
     private void renderBossBar(DrawContext context, int x, int y, int width, int height) {
-        context.drawTexture(BARS_TEXTURE, x, y, 0, color.ordinal() * HEIGHT * 2 + height, width, 5);
         RenderSystem.enableBlend();
-        context.drawTexture(BARS_TEXTURE, x, y, 0, NOTCHED_BAR_OVERLAY_V + (style.ordinal() - 1) * HEIGHT * 2 + height, width, HEIGHT);
+        context.drawGuiTexture(GREEN_BACKGROUND_TEXTURE, 182, 5, 0, 0, x, y, 182, height);
+        context.drawGuiTexture(NOTCHED_BACKGROUND_TEXTURE, 182, 5, 0, 0, x, y, 182, height);
+        context.drawGuiTexture(GREEN_TEXTURE, 182, 5, 0, 0, x, y, width, height);
+        context.drawGuiTexture(NOTCHED_PROGRESS_TEXTURE, 182, 5, 0, 0, x, y, width, 5);
         RenderSystem.disableBlend();
 
     }

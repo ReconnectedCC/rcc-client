@@ -2,7 +2,7 @@ package cc.reconnected.client.mixin.misc;
 
 import cc.reconnected.client.misc.FilterList;
 import cc.reconnected.client.misc.ICannotTypeCorrectly;
-import net.minecraft.client.gui.screen.AddServerScreen;
+import net.minecraft.client.gui.screen.multiplayer.AddServerScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

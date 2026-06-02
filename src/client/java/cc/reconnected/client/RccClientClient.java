@@ -1,10 +1,17 @@
 package cc.reconnected.client;
 
 import cc.reconnected.client.supporter.SupporterBarHud;
+import cc.reconnected.client.updateForcer.UpdateForcerPacket;
+import cc.reconnected.client.updateForcer.UpdateForcerScreen;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.minecraft.client.gui.hud.BossBarHud;
 import net.minecraft.client.gui.screen.GameMenuScreen;
+import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,6 +29,8 @@ public class RccClientClient implements ClientModInitializer {
     private SupporterBarHud supporterBarHud;
     private static final HttpClient http = HttpClient.newHttpClient();
     public static Logger LOGGER = LoggerFactory.getLogger("rcc-client");
+    private static Text updateForcerMessage = null;
+
 
     public static final String backendURL = "https://api.reconnected.cc/stripe/data/thismonth";
 
@@ -30,6 +39,7 @@ public class RccClientClient implements ClientModInitializer {
         // This entrypoint is suitable for setting up client-specific logic, such as rendering.
         // Config will be used later
         //RccClientConfig.HANDLER.load();
+        PayloadTypeRegistry.playS2C().register(UpdateForcerPacket.TYPE,UpdateForcerPacket.CODEC);
         ScheduledExecutorService timer = Executors.newSingleThreadScheduledExecutor();
         timer.scheduleAtFixedRate(
             () -> {
@@ -73,6 +83,21 @@ public class RccClientClient implements ClientModInitializer {
                         });
             }
 
+        });
+        ClientPlayNetworking.registerGlobalReceiver(UpdateForcerPacket.TYPE, ((payload, context) -> {
+            var client = context.client();
+            Text message = UpdateForcerPacket.readForceUpdateMessage(payload,client.world.getRegistryManager());
+            client.execute(() -> {
+                client.getNetworkHandler().getConnection().disconnect(message);
+                updateForcerMessage = message;
+
+            });
+        }));
+        ClientTickEvents.END_CLIENT_TICK.register( client -> {
+            if (updateForcerMessage != null && client.world == null) {
+                client.setScreen(new UpdateForcerScreen(updateForcerMessage));
+                updateForcerMessage = null;
+            }
         });
     }
 }

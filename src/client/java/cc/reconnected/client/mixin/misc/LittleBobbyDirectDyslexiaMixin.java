@@ -2,7 +2,7 @@ package cc.reconnected.client.mixin.misc;
 
 import cc.reconnected.client.misc.FilterList;
 import cc.reconnected.client.misc.ICannotTypeCorrectly;
-import net.minecraft.client.gui.screen.DirectConnectScreen;
+import net.minecraft.client.gui.screen.multiplayer.DirectConnectScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.network.ServerInfo;
 import org.spongepowered.asm.mixin.Final;
