@@ -13,13 +13,7 @@ public abstract class YggdrasilUserApiServiceMixin {
 
     // Bypassing phoning home
     @Inject(method = "fetchProperties", at = @At("HEAD"), cancellable = true)
-    private void rcc$fetchProperties(CallbackInfo ci) {
-        ci.cancel();
-    }
-
-    // Down with dystopian surveillance, right to self-government of Minecraft servers
-    @Inject(method = "properties", at = @At("HEAD"), cancellable = true)
-    private void rcc$getProperties(CallbackInfoReturnable<UserApiService.UserProperties> cir) {
+    private void rcc$fetchProperties(CallbackInfoReturnable<UserApiService.UserProperties> cir) {
         cir.setReturnValue(UserApiService.OFFLINE_PROPERTIES);
     }
 }
